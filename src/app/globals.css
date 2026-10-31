@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Core brand tokens from design-tokens.md */
+  --color-primary: #00511e;
+  --color-on-primary: #ffffff;
+  --color-primary-hover: #003d16;
+  --color-primary-tint: #e1efe4;
+  --color-primary-line: #c5e2cd;
+
+  /* Surfaces & Ink */
+  --bg-main: #f3f7f1;
+  --bg-card: #ffffff;
+  --text-ink: #12261a;
+  --text-muted: #5d7164;
+  --border-line: #dce5d9;
+
+  /* State colors */
+  --color-success-icon: #1f9d4d;
+  --color-success-fill: #15803d;
+  --color-on-success: #ffffff;
+  --color-warning: #b45309;
+  --color-on-warning: #ffffff;
+  --color-info: #0c5a69;
+  --color-info-bg: #e6fcf5;
+
+  /* Radii & Shadows */
+  --radius-card: 14px;
+  --radius-element: 10px;
+  --radius-pill: 9999px;
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.03);
+  --shadow-float: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /* Typography */
+  --font-heading: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-sans: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --color-primary: #58c47f;
+  --color-on-primary: #08170d;
+  --color-primary-hover: #48b06f;
+  --color-primary-tint: #173223;
+  --color-primary-line: #244732;
+
+  --bg-main: #0d1a11;
+  --bg-card: #142319;
+  --text-ink: #e8f1ea;
+  --text-muted: #9bb0a1;
+  --border-line: #24372b;
+
+  --color-success-icon: #34d399;
+  --color-success-fill: #16a34a;
+  --color-on-success: #052e16;
+  --color-warning: #fbbf24;
+  --color-on-warning: #2d1900;
+  --color-info: #38bdf8;
+  --color-info-bg: #082f49;
+
+  --shadow-card: none;
+  --shadow-float: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-primary: #58c47f;
+    --color-on-primary: #08170d;
+    --color-primary-hover: #48b06f;
+    --color-primary-tint: #173223;
+    --color-primary-line: #244732;
+
+    --bg-main: #0d1a11;
+    --bg-card: #142319;
+    --text-ink: #e8f1ea;
+    --text-muted: #9bb0a1;
+    --border-line: #24372b;
+
+    --color-success-icon: #34d399;
+    --color-success-fill: #16a34a;
+    --color-on-success: #052e16;
+    --color-warning: #fbbf24;
+    --color-on-warning: #2d1900;
+    --color-info: #38bdf8;
+    --color-info-bg: #082f49;
+
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-ink);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.015em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Material symbols utility */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

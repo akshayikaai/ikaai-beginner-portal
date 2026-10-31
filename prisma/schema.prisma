@@ -1,0 +1,392 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  LEARNER
+  INSTRUCTOR
+  ADMIN
+}
+
+enum ResourceType {
+  PDF
+  DOCUMENT
+  IMAGE
+  VIDEO
+}
+
+enum ExamStatus {
+  NOT_SUBMITTED
+  SUBMITTED
+  GRADED
+}
+
+enum FeedbackScope {
+  PROGRAMME
+  MODULE
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  SUSPENDED
+}
+
+model User {
+  id               String               @id @default(cuid())
+  email            String               @unique
+  passwordHash     String
+  name             String
+  avatarUrl        String?
+  role             Role                 @default(LEARNER)
+  department       String
+  tokenVersion     Int                  @default(1)
+  isAnonymised     Boolean              @default(false)
+  anonymisedAt     DateTime?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  enrollments      Enrollment[]
+  instructedProgs  ProgrammeInstructor[]
+  progressRecords  ResourceProgress[]
+  quizSubmissions  QuizSubmission[]
+  examSubmissions  ExamSubmission[]
+  feedbacks        Feedback[]
+  sentMessages     ChatMessage[]        @relation("SentMessages")
+  receivedMessages ChatMessage[]        @relation("ReceivedMessages")
+  announcements    Announcement[]
+  certificates     Certificate[]
+  uploadedFiles    FileAsset[]
+  consentLogs      ConsentLog[]
+  passwordResets   PasswordResetToken[]
+
+  @@index([role])
+  @@index([isAnonymised])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tokenHash])
+}
+
+model RateLimitRecord {
+  key       String   @id
+  count     Int      @default(1)
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}
+
+model Programme {
+  id             String                @id @default(cuid())
+  slug           String                @unique
+  title          String
+  tagline        String
+  description    String                @db.Text
+  colorTag       String
+  colorBgLight   String
+  colorTextLight String
+  archivedAt     DateTime?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  instructors    ProgrammeInstructor[]
+  enrollments    Enrollment[]
+  modules        Module[]
+  writtenExam    WrittenExam?
+  announcements  Announcement[]
+  chatMessages   ChatMessage[]
+  feedbacks      Feedback[]
+  certificates   Certificate[]
+
+  @@index([slug])
+  @@index([archivedAt])
+}
+
+model ProgrammeInstructor {
+  id          String    @id @default(cuid())
+  programmeId String
+  userId      String
+  assignedAt  DateTime  @default(now())
+
+  programme   Programme @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@unique([programmeId, userId])
+}
+
+model Enrollment {
+  id          String           @id @default(cuid())
+  userId      String
+  programmeId String
+  status      EnrollmentStatus @default(ACTIVE)
+  enrolledAt  DateTime         @default(now())
+  completedAt DateTime?
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Restrict)
+  programme   Programme        @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, programmeId])
+  @@index([userId])
+  @@index([programmeId])
+}
+
+model Module {
+  id          String       @id @default(cuid())
+  programmeId String
+  sortOrder   Float        @default(1000.0)
+  title       String
+  description String       @db.Text
+  objectives  String[]
+  createdAt   DateTime     @default(now())
+
+  programme   Programme    @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+  resources   Resource[]
+  quiz        Quiz?
+  faqs        FAQ[]
+  feedbacks   Feedback[]
+
+  @@index([programmeId, sortOrder])
+}
+
+model Resource {
+  id          String             @id @default(cuid())
+  moduleId    String
+  sortOrder   Float              @default(1000.0)
+  title       String
+  type        ResourceType
+  url         String
+  fileAssetId String?
+  readingTime Int                @default(30)
+  summary     String?            @db.Text
+  contentHtml String?            @db.Text
+
+  module      Module             @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  fileAsset   FileAsset?         @relation(fields: [fileAssetId], references: [id], onDelete: SetNull)
+  progress    ResourceProgress[]
+
+  @@index([moduleId, sortOrder])
+}
+
+model ResourceProgress {
+  id           String    @id @default(cuid())
+  userId       String
+  resourceId   String
+  completed    Boolean   @default(false)
+  startedAt    DateTime?
+  completedAt  DateTime?
+  secondsSpent Int       @default(0)
+
+  user         User      @relation(fields: [userId], references: [id], onDelete: Restrict)
+  resource     Resource  @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, resourceId])
+  @@index([userId])
+}
+
+model Quiz {
+  id           String           @id @default(cuid())
+  moduleId     String           @unique
+  title        String
+  instructions String?
+  passingScore Int              @default(70)
+
+  module       Module           @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  questions    QuizQuestion[]
+  submissions  QuizSubmission[]
+}
+
+model QuizQuestion {
+  id           String   @id @default(cuid())
+  quizId       String
+  sortOrder    Float    @default(1000.0)
+  question     String   @db.Text
+  options      String[]
+  correctIndex Int
+
+  quiz         Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId, sortOrder])
+}
+
+model QuizSubmission {
+  id          String   @id @default(cuid())
+  userId      String
+  quizId      String
+  score       Int
+  total       Int
+  percentage  Float
+  attemptNo   Int      @default(1)
+  resetCount  Int      @default(0)
+  resetById   String?
+  resetReason String?
+  submittedAt DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, quizId, attemptNo])
+  @@index([userId])
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  moduleId  String
+  sortOrder Float    @default(1000.0)
+  question  String
+  answer    String   @db.Text
+
+  module    Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@index([moduleId, sortOrder])
+}
+
+model WrittenExam {
+  id                String           @id @default(cuid())
+  programmeId       String           @unique
+  title             String
+  instructions      String           @db.Text
+  passingPercentage Int              @default(60)
+
+  programme         Programme        @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+  questions         ExamQuestion[]
+  submissions       ExamSubmission[]
+}
+
+model ExamQuestion {
+  id        String      @id @default(cuid())
+  examId    String
+  sortOrder Float       @default(1000.0)
+  question  String      @db.Text
+  maxMarks  Int         @default(10)
+
+  exam      WrittenExam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@index([examId, sortOrder])
+}
+
+model ExamSubmission {
+  id          String      @id @default(cuid())
+  examId      String
+  userId      String
+  status      ExamStatus  @default(SUBMITTED)
+  answersJson Json
+  marks       Int?
+  feedback    String?     @db.Text
+  gradedById  String?
+  submittedAt DateTime    @default(now())
+  gradedAt    DateTime?
+
+  exam        WrittenExam @relation(fields: [examId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@unique([examId, userId])
+  @@index([userId])
+}
+
+model Announcement {
+  id          String     @id @default(cuid())
+  programmeId String?
+  authorId    String
+  title       String
+  content     String     @db.Text
+  pinned      Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  programme   Programme? @relation(fields: [programmeId], references: [id], onDelete: SetNull)
+  author      User       @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([programmeId])
+}
+
+model ChatMessage {
+  id          String     @id @default(cuid())
+  programmeId String
+  senderId    String
+  recipientId String?
+  message     String     @db.Text
+  createdAt   DateTime   @default(now())
+
+  programme   Programme  @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+  sender      User       @relation("SentMessages", fields: [senderId], references: [id], onDelete: Restrict)
+  recipient   User?      @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: SetNull)
+
+  @@index([programmeId, createdAt])
+  @@index([senderId, recipientId])
+}
+
+model Feedback {
+  id          String        @id @default(cuid())
+  programmeId String
+  moduleId    String?
+  authorId    String
+  scope       FeedbackScope @default(PROGRAMME)
+  comments    String        @db.VarChar(2000)
+  createdAt   DateTime      @default(now())
+
+  programme   Programme     @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+  module      Module?       @relation(fields: [moduleId], references: [id], onDelete: SetNull)
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([programmeId])
+}
+
+model Certificate {
+  id             String    @id @default(cuid())
+  certificateNo  String    @unique
+  recipientName  String
+  userId         String
+  programmeId    String
+  issuedAt       DateTime  @default(now())
+  finalGrade     String
+  verificationId String    @unique @default(cuid())
+
+  user           User      @relation(fields: [userId], references: [id], onDelete: Restrict)
+  programme      Programme @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, programmeId])
+  @@index([certificateNo])
+  @@index([verificationId])
+}
+
+model FileAsset {
+  id           String     @id @default(cuid())
+  filename     String
+  storagePath  String
+  mimeType     String
+  sizeBytes    Int
+  uploadedById String
+  uploadedAt   DateTime   @default(now())
+
+  uploadedBy   User       @relation(fields: [uploadedById], references: [id], onDelete: Restrict)
+  resources    Resource[]
+
+  @@index([uploadedById])
+}
+
+model ConsentLog {
+  id          String    @id @default(cuid())
+  userId      String
+  purpose     String
+  policyVer   String
+  consentedAt DateTime  @default(now())
+  ipAddress   String?
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+}

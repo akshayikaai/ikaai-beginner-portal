@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ikaai Academy – Learning Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f7f1;--card:#fff;--ink:#12261a;--mut:#5d7164;--line:#dce5d9;--g:#00511e;--on:#fff;--g2:#e1efe4;--ok:#1f9d4d;--am:#e8a317;--r:14px;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1a11;--card:#142319;--ink:#e8f1ea;--mut:#9bb0a1;--line:#24372b;--g:#58c47f;--on:#08170d;--g2:#173223;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1a11;--card:#142319;--ink:#e8f1ea;--mut:#9bb0a1;--line:#24372b;--g:#58c47f;--on:#08170d;--g2:#173223;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 Figtree,system-ui,sans-serif;display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+h1,h2,h3{font-family:'Bricolage Grotesque',Figtree,sans-serif;margin:0;line-height:1.2}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+svg{flex:none}
+aside{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow:auto;background:var(--card);border-right:1px solid var(--line);padding:20px 16px;display:flex;flex-direction:column;gap:14px}
+.logo{display:flex;align-items:center;gap:10px;font:700 22px 'Bricolage Grotesque',sans-serif;color:var(--g)}
+.logo small{font:500 13px Figtree;color:var(--mut)}
+.mark{width:34px;height:34px;border-radius:10px;background:var(--g);color:var(--on);display:grid;place-items:center}
+select,textarea,input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.bar{height:6px;border-radius:9px;background:var(--g2);overflow:hidden}.bar i{display:block;height:100%;background:var(--g);border-radius:9px;transition:width .4s}
+.mut{color:var(--mut);font-size:13px}
+.mods{display:flex;flex-direction:column;gap:6px;flex:1;min-height:120px;overflow:auto}
+.mod{border:1px solid var(--line);border-radius:10px}
+.mod>button{width:100%;display:flex;align-items:center;gap:8px;padding:9px 10px;text-align:left;font-weight:500}
+.mod>button.on{background:var(--g);color:var(--on);border-radius:9px}
+.mod .t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sub{padding:4px 10px 8px 14px;display:flex;flex-direction:column;gap:2px}
+.sub button{text-align:left;font-size:13px;color:var(--mut);padding:4px 6px;border-radius:6px;display:flex;gap:6px;align-items:center}
+.sub button:hover{background:var(--g2)}
+.nav{display:flex;flex-direction:column;gap:6px}
+.nav button{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--bg);font-weight:500;text-align:left}
+.nav button.on{background:var(--g);color:var(--on)}
+main{padding:28px clamp(16px,4vw,48px) 100px;max-width:860px;width:100%}
+.top{display:none}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-top:16px}
+.card h2{font-size:18px;margin-bottom:12px}
+.row{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;margin-top:8px;background:var(--bg);width:100%;text-align:left}
+.row .ic{color:var(--g)}.row .n{flex:1;font-weight:500}
+.chk{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:transparent}
+.chk.d{border-color:var(--ok);color:var(--ok)}
+.btn{background:var(--g);color:var(--on);padding:9px 16px;border-radius:999px;font-weight:600}
+.btn.o{background:none;border:1px solid var(--line);color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.pill{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--g2);color:var(--g);font-weight:600}
+.prev{margin-top:8px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.paper{background:#fff;color:#1b2a20;padding:22px;height:280px;overflow:hidden;position:relative}
+.paper b{display:block;font:700 17px 'Bricolage Grotesque';margin-bottom:10px;color:#00511e}
+.paper p{height:8px;border-radius:4px;background:#e3e9e1;margin:9px 0}
+.paper.fs{height:70vh}
+.pbar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font-size:13px;color:var(--mut)}
+.fq{border:1px solid var(--line);border-radius:12px;margin-top:8px;background:var(--bg)}
+.fq>button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:12px;font-weight:500}
+.fq>button span:first-child{flex:1}
+.fq p{margin:0;padding:0 12px 12px;color:var(--mut)}
+.foot{position:fixed;bottom:env(safe-area-inset-bottom,0px);left:300px;right:0;display:flex;justify-content:space-between;padding:12px clamp(16px,4vw,48px);background:linear-gradient(transparent,var(--bg) 40%);pointer-events:none}
+.foot button{pointer-events:auto;box-shadow:0 2px 10px #0002}
+.modal{position:fixed;inset:0;background:#0008;display:grid;place-items:center;padding:16px;z-index:30}
+.modal>div{background:var(--card);border-radius:var(--r);padding:22px;max-width:520px;width:100%;max-height:90vh;overflow:auto}
+.opt{display:flex;gap:10px;padding:10px;border:1px solid var(--line);border-radius:10px;margin-top:6px;cursor:pointer}
+.msgs{height:340px;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:6px}
+.b{max-width:75%;padding:9px 13px;border-radius:14px;background:var(--bg)}.b.me{align-self:flex-end;background:var(--g);color:var(--on)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;z-index:40}
+.scrim{display:none}
+@media (max-width:900px){
+body{grid-template-columns:1fr}
+aside{position:fixed;left:0;top:0;bottom:0;width:min(320px,86vw);height:auto;z-index:20;transform:translateX(-102%);transition:transform .25s;padding-top:calc(20px + env(safe-area-inset-top,0px))}
+body.open aside{transform:none}
+body.open .scrim{display:block;position:fixed;inset:0;background:#0006;z-index:15}
+.top{display:flex;position:sticky;top:env(safe-area-inset-top,0px);justify-content:space-between;align-items:center;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--line);z-index:10}
+.foot{left:0}
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--card);z-index:11}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<aside id="side"></aside>
+<div class="scrim" data-a="drawer"></div>
+<div>
+  <div class="top"><button data-a="drawer" aria-label="Open menu" id="menuBtn"></button><span class="logo" style="font-size:18px">ikaai <small>Academy</small></span><span class="pill" id="av">PS</span></div>
+  <main id="app"></main>
+</div>
+<div id="foot"></div>
+<div id="modal"></div>
+<script>
+const P={menu:"M4 6h16M4 12h16M4 18h16",check:"M20 6 9 17l-5-5",dl:"M12 3v12m0 0-4-4m4 4 4-4M4 21h16",chat:"M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z",mega:"M3 11v2a1 1 0 0 0 1 1h3l8 4V6L7 10H4a1 1 0 0 0-1 1zM19 8a5 5 0 0 1 0 8",fb:"M4 4h16v12H8l-4 4zM12 7v5M9.5 9.5h5",grade:"M2 9l10-5 10 5-10 5zM6 11v5c3 2.5 9 2.5 12 0v-5",gear:"M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2",mail:"M3 5h18v14H3zM3 6l9 7 9-7",chev:"m6 9 6 6 6-6",doc:"M6 3h9l4 4v14H6zM14 3v5h5M9 13h6M9 17h6",q:"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9.6 9.3a2.5 2.5 0 1 1 3.6 2.2c-.8.4-1.2 1-1.2 1.8M12 17v.01",x:"M6 6l12 12M18 6 6 18",send:"m22 2-7 20-4-9-9-4zM22 2 11 13",full:"M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5",exam:"M5 3h14v18H5zM9 8h6M9 12h6M9 16h3"};
+const ic=(n,s=18)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${P[n]}"/></svg>`;
+const M=[
+{t:'Onboarding & Digital Workspace',d:'Set up your accounts and learn the data-security rules before you start.',obj:['Set up your Ikaai email and shared drive','Follow data-protection rules for survey data','Know who to contact for support'],res:[['New Joiner Checklist','Document'],['Welcome to Ikaai','PDF'],['Research Intern Handbook','PDF'],['Weekly Report Template','Document'],['Data Security Essentials','PDF']],faq:[['Who do I contact for tool access?','Use Message Instructor. Access requests are cleared within a working day.'],['Can I use my own phone for fieldwork?','Yes, once the survey app is installed and device encryption is on.']],q:[['Where is raw survey data stored?',['Personal drive','Ikaai secure shared drive','WhatsApp'],1],['Respondent names in reports should be…',['Shared freely','Anonymised','Posted online'],1]]},
+{t:'Company Overview & Culture',d:'Who we are, what we do and how we work from the ground to the boardroom.',obj:['Understand Ikaai’s mission and service lines','Know the national priorities we support','Understand your role and expectations'],res:[['Our Journey & Growth','PDF'],['Organisation Chart','PDF'],['Mission & Values','PDF'],['Ikaai Solutions Overview','PDF']],faq:[['What does a typical week look like?','Field planning on Monday, data work midweek and a team review on Friday.'],['What happens if I miss a weekly meeting?','Send a note to your team lead and read the shared minutes.']],q:[['How many core solution areas does Ikaai list?',['3','7','12'],1],['Ikaai’s tagline is about moving insight…',['Online to offline','From ground to boardroom','Cities to villages'],1]]},
+{t:'Monitoring & Evaluation Basics',d:'Baseline, midline, endline and impact assessment, explained step by step.',obj:['Tell apart baseline, midline and endline studies','Read a results framework','Draft a simple evaluation plan'],res:[['M&E Primer','PDF'],['Results Framework Template','Document'],['Sample Baseline Report','PDF']],faq:[['What is third-party evaluation?','An independent review of a programme by an organisation that did not run it.']],q:[['A baseline study is done…',['After the programme','Before the programme','Never'],1],['An endline study measures…',['Starting point','Final outcomes','Budget only'],1]]},
+{t:'Field Data Collection',d:'Sampling, survey tools, ethics and quality checks in the field.',obj:['Plan a household survey','Use tablet-based survey tools','Apply consent and ethics rules'],res:[['Field Manual','PDF'],['Questionnaire Design Guide','PDF'],['Consent Form Template','Document'],['Quality Check List','Document']],faq:[['What if a respondent refuses?','Thank them, record the refusal and move to the next sampled household.'],['How do I handle poor connectivity?','Collect offline and sync as soon as you are back in range.']],q:[['Before an interview you must get…',['A gift','Informed consent','A signature from the village head only'],1],['Surveys can be collected offline.',['True','False'],0]]},
+{t:'Data Analysis & Reporting',d:'Clean data, find patterns and turn results into clear recommendations.',obj:['Clean and validate survey data','Build charts for a report','Write a one-page insight brief'],res:[['Data Cleaning Guide','PDF'],['Dashboard Examples','PDF'],['Insight Brief Template','Document'],['Report Writing Style Guide','PDF']],faq:[['Which tools will I use?','Spreadsheets, statistical software and Ikaai’s dashboards.']],q:[['A good insight brief is…',['Long and technical','Short and actionable','Only tables'],1],['Data cleaning happens…',['Before analysis','After the report','Never'],0]]}];
+const S={view:'mod',mod:1,exp:{1:true},open:null,full:false,more:false,done:{},faq:{},score:{0:[2,2]},chat:[],fb:[],exam:0,theme:'',name:'Priya Sharma',tick:null,toast:''};
+M[0].res.forEach((_,i)=>S.done['0-'+i]=1);M[0].faq.forEach((_,i)=>S.faq['0-'+i]=1);
+M[1].res.slice(0,2).forEach((_,i)=>S.done['1-'+i]=1);S.faq['1-0']=1;
+const tot=i=>M[i].res.length+1+M[i].faq.length;
+const cnt=i=>M[i].res.filter((_,r)=>S.done[i+'-'+r]).length+(S.score[i]?1:0)+M[i].faq.filter((_,f)=>S.faq[i+'-'+f]).length;
+const pc=i=>Math.round(cnt(i)/tot(i)*100);
+const all=()=>Math.round(M.reduce((a,_,i)=>a+pc(i),0)/M.length);
+const gr=p=>p>=90?'A':p>=80?'B':p>=70?'C':'D';
+const sp=i=>S.score[i]?Math.round(S.score[i][0]/S.score[i][1]*100):null;
+const $=id=>document.getElementById(id);
+const ico={PDF:'doc',Document:'doc'};
+function side(){
+ $('side').innerHTML=`<div class="logo"><span class="mark">${ic('grade',20)}</span><span>ikaai <small>Academy</small></span></div>
+ <div><div class="mut" style="margin-bottom:4px">Programme</div><select aria-label="Programme"><option>Research & Field Operations</option><option>Policy & Governance</option></select></div>
+ <div><div class="bar"><i style="width:${all()}%"></i></div><div class="mut" style="margin-top:4px">Programme completion: <b>${all()}%</b></div></div>
+ <div class="mods">${M.map((m,i)=>`<div class="mod"><button class="${S.view==='mod'&&S.mod===i?'on':''}" data-a="mod" data-i="${i}"><span class="t">${i}. ${m.t}</span><span class="mut" style="color:inherit">${pc(i)}%</span></button>${S.exp[i]?`<div class="sub">${m.res.map((r,k)=>`<button data-a="res" data-i="${i}" data-k="${k}">${S.done[i+'-'+k]?`<span style="color:var(--ok)">${ic('check',14)}</span>`:ic('doc',14)} ${i}.${k+1} ${r[0]}</button>`).join('')}</div>`:''}</div>`).join('')}
+ <div class="mod"><button class="${S.view==='exam'?'on':''}" data-a="nav" data-v="exam"><span class="t">${ic('exam',16)} Written Exam</span></button></div></div>
+ <div class="nav">${[['chat','Chat','chat'],['mega','Announcements','ann'],['fb','Feedback','fb'],['grade','Grade','grade'],['gear','Account Settings','set']].map(n=>`<button class="${S.view===n[2]?'on':''}" data-a="nav" data-v="${n[2]}">${ic(n[0])} ${n[1]}</button>`).join('')}<button data-a="nav" data-v="chat">${ic('mail')} Message Instructor</button></div>`;
+}
+function modView(){
+ const m=M[S.mod],i=S.mod,p=sp(i);
+ return `<h1 style="font-size:32px">Research & Field Operations</h1>
+ <p class="mut" style="max-width:62ch">${S.more?'This programme prepares research interns to support Ikaai’s monitoring, evaluation and market research projects, from field planning to final reporting for clients across India.':'This programme prepares research interns to support Ikaai’s monitoring, evaluation and market…'} <button data-a="more" style="color:var(--g);font-weight:600">${S.more?'Show less':'Show more'}</button></p>
+ <div class="card"><div style="display:flex;justify-content:space-between;gap:12px"><h2>${i}. ${m.t}</h2><div style="text-align:right"><div class="mut">${p!=null?gr(p)+' ('+p+'%)':'No grade yet'}</div><button class="btn o" data-a="nav" data-v="fb" style="padding:5px 12px;margin-top:4px;display:inline-flex;gap:6px;align-items:center">${ic('fb',15)} Feedback</button></div></div>
+ <p class="mut" style="margin:6px 0">${m.d}</p><div class="mut" style="margin-top:10px">Learning objectives</div><ul style="margin:4px 0 12px;padding-left:20px">${m.obj.map(o=>`<li>${o}</li>`).join('')}</ul>
+ <div class="mut">${cnt(i)} / ${tot(i)} completed</div><div class="bar" style="margin-top:6px"><i style="width:${pc(i)}%"></i></div></div>
+ <div class="card"><h2>Resources</h2>${m.res.map((r,k)=>{const d=S.done[i+'-'+k],o=S.open===i+'-'+k;return `<div><div class="row" style="cursor:pointer" data-a="res" data-i="${i}" data-k="${k}"><span class="ic">${ic(ico[r[1]]||'doc',22)}</span><span class="n">${i}.${k+1} ${r[0]}<br><span class="mut" style="font-weight:400">${r[1]}</span></span><span data-a="dl" class="mut" title="Download">${ic('dl')}</span><span class="chk ${d?'d':''}">${ic('check',14)}</span></div>
+ ${o?`<div class="prev"><div class="paper ${S.full?'fs':''}"><b>${r[0]}</b><p></p><p style="width:92%"></p><p style="width:85%"></p><p></p><p style="width:70%"></p><p style="width:90%"></p><p></p><p style="width:60%"></p></div><div class="pbar"><span>${d?'Completed':'Keep reading · completes in 5s'}</span><button class="btn o" data-a="full" style="display:flex;gap:6px;align-items:center;padding:5px 12px">${ic('full',14)} Fullscreen</button></div></div>`:''}</div>`}).join('')}</div>
+ <div class="card"><h2>Module quiz</h2><div class="row" style="cursor:default"><span class="ic">${ic('q',22)}</span><span class="n">${m.t}<br><span class="mut" style="font-weight:400">${S.score[i]?'Completed':'Not started'}</span></span><span class="chk ${S.score[i]?'d':''}">${ic('check',14)}</span></div>
+ <div class="row" style="cursor:default;justify-content:space-between"><div><span class="pill">Module quiz</span><div style="font:700 18px 'Bricolage Grotesque';margin-top:6px">${m.t}</div></div>${S.score[i]?`<div style="text-align:right"><div class="mut">Your score</div><b style="font-size:24px;color:var(--ok)">${S.score[i][0]}</b> / ${S.score[i][1]}<div class="mut">One attempt only</div></div>`:`<button class="btn" data-a="quiz">Start quiz</button>`}</div></div>
+ <div class="card"><div style="display:flex;justify-content:space-between"><h2>FAQs</h2><span class="chk ${m.faq.every((_,f)=>S.faq[i+'-'+f])?'d':''}">${ic('check',14)}</span></div><div class="mut">Common questions for this module. ${m.faq.filter((_,f)=>S.faq[i+'-'+f]).length} / ${m.faq.length} read.</div>
+ ${m.faq.map((f,k)=>{const o=S.open==='f'+i+'-'+k;return `<div class="fq"><button data-a="faq" data-i="${i}" data-k="${k}"><span class="pill" style="min-width:24px;text-align:center">${k+1}</span><span>${f[0]}</span><span class="chk ${S.faq[i+'-'+k]?'d':''}" style="width:22px;height:22px">${ic('check',12)}</span></button>${o?`<p>${f[1]}</p>`:''}</div>`}).join('')}</div>`;
+}
+function view(){
+ if(S.view==='mod')return modView();
+ if(S.view==='chat')return `<h1 style="font-size:32px">Messages</h1><p class="mut">Chat with the instructors on your programme.</p><div class="card"><div class="msgs" id="msgs">${S.chat.length?S.chat.map(c=>`<div class="b ${c[0]?'me':''}">${c[1]}</div>`).join(''):`<div class="mut" style="margin:auto;text-align:center">${ic('chat',28)}<br>No messages yet. Say hello!</div>`}</div><div style="display:flex;gap:8px;margin-top:10px"><input type="text" id="ci" placeholder="Type a message"><button class="btn" data-a="send" aria-label="Send">${ic('send')}</button></div></div>`;
+ if(S.view==='ann')return `<h1 style="font-size:32px">Announcements</h1>${[['Coordinator','28 Oct 2026','Field visit schedule for November','Teams for the November field visits are on the shared drive. Please confirm your availability by Friday and complete Module 3 before travel.'],['Programme team','21 Oct 2026','New resources added','Updated survey templates and the sample baseline report are now in Module 2. Complete the pending quiz by month end.']].map(a=>`<div class="card"><span class="pill">${a[0]}</span> <span class="mut">${a[1]}</span><h2 style="margin:8px 0 6px">${a[2]}</h2><p style="margin:0" class="mut">${a[3]}</p></div>`).join('')}`;
+ if(S.view==='fb')return `<h1 style="font-size:32px">Feedback</h1><div class="card"><h2>${ic('fb')} Tell us how it is going</h2><p class="mut">Instructors see your feedback without your name. Administrators can see who sent it.</p><label class="mut">What is this about?</label><select id="fs"><option>Whole programme</option>${M.map((m,i)=>`<option>${i}. ${m.t}</option>`).join('')}</select><textarea id="ft" rows="4" maxlength="2000" placeholder="What worked well? What could be better?" style="margin-top:10px"></textarea><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span class="mut" id="fc">0 / 2000</span><button class="btn" data-a="fbs">Submit feedback</button></div></div><div class="card"><h2>Your feedback</h2>${S.fb.length?S.fb.map(f=>`<div class="row"><span class="n">${f[0]}<br><span class="mut" style="font-weight:400">${f[1]}</span></span></div>`).join(''):'<p class="mut">You have not sent any feedback yet.</p>'}</div>`;
+ if(S.view==='grade'){const g=M.map((_,i)=>sp(i)).filter(x=>x!=null),a=g.length?Math.round(g.reduce((x,y)=>x+y)/g.length):null;return `<h1 style="font-size:32px">Grade report</h1><div class="card"><div class="mut">Quiz average: <b>${a!=null?gr(a)+' ('+a+'%)':'–'}</b> · Written exam: <b>${S.exam===2?'Submitted':'Not submitted'}</b></div>${M.map((m,i)=>{const p=sp(i);return `<div class="row"><span class="n">${i}. ${m.t}<br><span class="mut" style="font-weight:400">${m.t} quiz</span></span><b>${p!=null?gr(p)+' ('+p+'%)':'No grade yet'}</b></div>`}).join('')}</div>`}
+ if(S.view==='set')return `<h1 style="font-size:32px">Account settings</h1><div class="card"><label class="mut">Display name</label><input type="text" id="nm" value="${S.name}"><div style="margin-top:14px"><label class="mut">Appearance</label><div style="display:flex;gap:8px;margin-top:6px">${['','light','dark'].map(t=>`<button class="btn ${S.theme===t?'':'o'}" data-a="theme" data-t="${t}">${t||'System'}</button>`).join('')}</div></div><button class="btn" data-a="savename" style="margin-top:16px">Save changes</button></div>`;
+ if(S.view==='exam')return `<h1 style="font-size:32px">Written exam</h1><div class="card"><span class="pill">${S.exam===2?'Submitted':'Programme-end'}</span><h2 style="margin:8px 0">Written exam</h2><p class="mut">Answer all questions in your own words. Your instructor will review and grade your responses.</p>${S.exam===0?`<div style="text-align:center;padding:20px"><button class="btn" data-a="exam">Start exam</button></div>`:S.exam===1?['Explain the difference between a baseline and an endline study.','Describe how you would prepare for a household survey.','Write a short insight from sample survey data.'].map((q,k)=>`<div style="margin-top:12px"><b>${k+1}. ${q}</b><textarea rows="3" style="margin-top:6px"></textarea></div>`).join('')+`<button class="btn" data-a="exam" style="margin-top:14px">Submit exam</button>`:`<p>Your answers are with your instructor for review.</p>`}</div>`;
+}
+function foot(){
+ $('foot').innerHTML=S.view==='mod'?`<div class="foot"><button class="btn o" style="background:var(--card)" data-a="step" data-d="-1" ${S.mod===0?'disabled':''}>‹ Previous module</button><button class="btn" data-a="step" data-d="1" ${S.mod===M.length-1?'disabled':''}>Next module ›</button></div>`:'';
+}
+function render(){side();$('app').innerHTML=view();foot();$('menuBtn').innerHTML=ic('menu',22);$('av').textContent=S.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function toast(t){S.toast=t;let e=document.querySelector('.toast');if(e)e.remove();e=document.createElement('div');e.className='toast';e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),1800)}
+function openRes(i,k){S.open=i+'-'+k;S.full=false;clearTimeout(S.tick);if(!S.done[i+'-'+k])S.tick=setTimeout(()=>{S.done[i+'-'+k]=1;toast('Resource completed');render()},5000)}
+function quiz(){const m=M[S.mod];let a=[];const q=()=>{$('modal').innerHTML=`<div class="modal"><div><div style="display:flex;justify-content:space-between"><h2>${m.t}</h2><button data-a="qx" aria-label="Close">${ic('x')}</button></div><p class="mut">One attempt only. This quiz can’t be retaken.</p>${m.q.map((x,qi)=>`<div style="margin-top:14px"><b>${qi+1}. ${x[0]}</b>${x[1].map((o,oi)=>`<label class="opt"><input type="radio" name="q${qi}" value="${oi}"> ${o}</label>`).join('')}</div>`).join('')}<button class="btn" data-a="qs" style="margin-top:16px">Submit quiz</button></div></div>`};q()}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,i=+b.dataset.i,k=+b.dataset.k;
+ if(a==='dl'){e.stopPropagation();toast('Download started (prototype)');return}
+ if(a==='drawer'){document.body.classList.toggle('open');return}
+ if(a==='nav'){S.view=b.dataset.v;S.open=null;document.body.classList.remove('open')}
+ else if(a==='mod'){if(S.view==='mod'&&S.mod===i)S.exp[i]=!S.exp[i];else{S.view='mod';S.mod=i;S.exp[i]=true;document.body.classList.remove('open')}S.open=null;scrollTo(0,0)}
+ else if(a==='res'){S.view='mod';S.mod=i;if(S.open===i+'-'+k)S.open=null;else openRes(i,k);document.body.classList.remove('open')}
+ else if(a==='full')S.full=!S.full;
+ else if(a==='more')S.more=!S.more;
+ else if(a==='faq'){const id='f'+i+'-'+k;S.open=S.open===id?null:id;S.faq[i+'-'+k]=1}
+ else if(a==='step'){S.mod+=+b.dataset.d;S.exp[S.mod]=true;S.open=null;scrollTo(0,0)}
+ else if(a==='quiz'){quiz();return}
+ else if(a==='qx'){$('modal').innerHTML='';return}
+ else if(a==='qs'){const m=M[S.mod];let s=0;m.q.forEach((x,qi)=>{const r=document.querySelector(`input[name=q${qi}]:checked`);if(r&&+r.value===x[2])s++});S.score[S.mod]=[s,m.q.length];$('modal').innerHTML='';toast('Quiz submitted: '+s+' / '+m.q.length)}
+ else if(a==='send'){const v=$('ci').value.trim();if(!v)return;S.chat.push([1,v]);setTimeout(()=>{S.chat.push([0,'Thanks for your message. An instructor will reply shortly.']);if(S.view==='chat'){render();const m=$('msgs');m&&(m.scrollTop=1e5)}},1000)}
+ else if(a==='fbs'){const v=$('ft').value.trim();if(!v){toast('Write your feedback first');return}S.fb.unshift([v,$('fs').value]);toast('Feedback sent')}
+ else if(a==='theme'){S.theme=b.dataset.t;S.theme?document.documentElement.setAttribute('data-theme',S.theme):document.documentElement.removeAttribute('data-theme')}
+ else if(a==='savename'){S.name=$('nm').value||S.name;toast('Changes saved')}
+ else if(a==='exam'){S.exam++;if(S.exam===2)toast('Exam submitted')}
+ render();
+});
+document.addEventListener('input',e=>{if(e.target.id==='ft')$('fc').textContent=e.target.value.length+' / 2000'});
+render();
+</script>
+</body>
+</html>
